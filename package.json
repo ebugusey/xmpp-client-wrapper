@@ -14,6 +14,8 @@
   },
   "devDependencies": {
     "@types/node": "^12.7.5",
+    "@types/xmpp__jid": "^0.6.1",
+    "@types/xmpp__xml": "^0.6.0",
     "tslint": "^5.20.0",
     "typescript": "^3.6.3"
   }
