@@ -6,6 +6,7 @@ import { IJoinOptions, IRoom } from './muc'
 export enum ClientStatus {
     online,
     offline,
+    connecting,
 }
 
 export interface IClient extends NodeJS.EventEmitter {
