@@ -19,3 +19,4 @@ rules:
   no-null-keyword: true
   unified-signatures: true
   no-non-null-assertion: true
+  object-literal-sort-keys: false
