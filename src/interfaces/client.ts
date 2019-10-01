@@ -9,9 +9,9 @@ export enum ClientStatus {
 }
 
 export interface IClient extends NodeJS.EventEmitter {
-    status: ClientStatus
+    readonly status: ClientStatus
 
-    joinedRooms: ReadonlyArray<IRoom>
+    readonly joinedRooms: ReadonlyArray<IRoom>
 
     on(event: 'chat', listener: (chat: IChat, message: IIncoming) => void): this
 
