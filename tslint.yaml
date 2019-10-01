@@ -2,6 +2,11 @@ defaultSeverity: warning
 extends:
   - tslint:recommended
 rules:
+  variable-name:
+    options:
+      - ban-keywords
+      - check-format
+      - allow-leading-underscore
   semicolon:
     options: never
   quotemark:
