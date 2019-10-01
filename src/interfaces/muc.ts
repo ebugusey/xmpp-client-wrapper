@@ -19,6 +19,9 @@ export interface IRoom extends NodeJS.EventEmitter {
     on(event: 'message', listener: (message: IIncoming) => void): this
     on(event: 'subject', listener: (subject: string) => void): this
 
+    emit(event: 'message', message: IIncoming): boolean
+    emit(event: 'subject', subject: string): boolean
+
     join(opts: IJoinOptions): Promise<this>
     leave(): Promise<this>
 
