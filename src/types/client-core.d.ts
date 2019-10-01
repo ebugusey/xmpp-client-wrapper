@@ -1,5 +1,6 @@
 declare module '@xmpp/client-core' {
     import { Connection } from '@xmpp/connection'
+    import { Element } from '@xmpp/xml'
 
     export class Client extends Connection {
         /**
