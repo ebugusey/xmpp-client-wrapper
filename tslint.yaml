@@ -20,3 +20,5 @@ rules:
   unified-signatures: true
   no-non-null-assertion: true
   object-literal-sort-keys: false
+  no-async-without-await: true
+  no-floating-promises: true

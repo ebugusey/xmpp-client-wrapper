@@ -47,7 +47,7 @@ export class Client extends EventEmitter implements IClient {
 
     public async chatWith(userJid: JID): Promise<IChat> {
         this.throwIfOffline()
-        this.waitForOnline()
+        await this.waitForOnline()
 
         const chat = new Chat(userJid, this._client)
 
