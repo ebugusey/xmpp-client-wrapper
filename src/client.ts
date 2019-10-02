@@ -10,7 +10,6 @@ import { IIncoming } from './interfaces/message'
 import { IJoinOptions, IRoom } from './interfaces/muc'
 
 export class Client extends EventEmitter implements IClient {
-
     private readonly _client: XmppClient
     private readonly _emitter: IClient
 
