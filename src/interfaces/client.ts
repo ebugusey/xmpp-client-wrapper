@@ -1,25 +1,23 @@
 import { JID } from '@xmpp/jid'
-import { IIncoming, IOutgoing } from './message'
+import { IChat } from './chat'
+import { IIncoming } from './message'
 import { IJoinOptions, IRoom } from './muc'
 
 export enum ClientStatus {
     online,
     offline,
+    connecting,
 }
 
 export interface IClient extends NodeJS.EventEmitter {
-    status: ClientStatus
+    readonly status: ClientStatus
 
-    joinedRooms: ReadonlyArray<IRoom>
+    readonly joinedRooms: ReadonlyArray<IRoom>
 
     on(event: 'chat', listener: (chat: IChat, message: IIncoming) => void): this
 
+    emit(event: 'chat', chat: IChat, message: IIncoming): boolean
+
     chatWith(jid: JID): Promise<IChat>
     join(channel: JID, opts?: IJoinOptions): Promise<IRoom>
-}
-
-interface IChat extends NodeJS.EventEmitter {
-    jid: JID
-
-    send(message: IOutgoing | string): Promise<string>
 }
