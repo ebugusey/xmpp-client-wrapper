@@ -73,16 +73,22 @@ export class Client extends EventEmitter implements IClient {
     }
 
     private onStanza(stanza: Element): void {
+        const asyncTasks: Array<Promise<void>> = []
+
         if (stanza.is('message')) {
             switch (stanza.attrs.type) {
                 case 'chat':
-                    this.onChat(stanza)
+                    const chatTask = this.onChat(stanza)
+                    asyncTasks.push(chatTask)
                     break
 
                 default:
                     break
             }
         }
+
+        Promise.all(asyncTasks)
+            .catch(err => this._emitter.emit('error', err))
     }
 
     private async onChat(stanza: Element): Promise<void> {
