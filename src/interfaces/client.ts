@@ -15,8 +15,10 @@ export interface IClient extends NodeJS.EventEmitter {
     readonly joinedRooms: ReadonlyArray<IRoom>
 
     on(event: 'chat', listener: (chat: IChat, message: IIncoming) => void): this
+    on(event: 'error', listener: (err: Error) => void): this
 
     emit(event: 'chat', chat: IChat, message: IIncoming): boolean
+    emit(event: 'error', err: Error): boolean
 
     chatWith(jid: JID): Promise<IChat>
     join(channel: JID, opts?: IJoinOptions): Promise<IRoom>
