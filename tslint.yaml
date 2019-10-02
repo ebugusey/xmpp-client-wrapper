@@ -1,7 +1,23 @@
 defaultSeverity: warning
 extends:
-  - tslint:recommended
+  - tslint:latest
 rules:
+  no-implicit-dependencies:
+    options:
+      - # exceptions
+        - '@xmpp/jid'
+        - '@xmpp/xml'
+        - '@xmpp/client-core'
+  no-submodule-imports:
+    options:
+      # exceptions
+      - uuid/v1
+  variable-name:
+    options:
+      - ban-keywords
+      - check-format
+      - allow-leading-underscore
+  prefer-readonly: true
   semicolon:
     options: never
   quotemark:
@@ -13,3 +29,8 @@ rules:
   no-null-keyword: true
   unified-signatures: true
   no-non-null-assertion: true
+  object-literal-sort-keys: false
+  no-async-without-await: true
+  no-floating-promises: true
+  strict-type-predicates: true
+  strict-boolean-expressions: true
