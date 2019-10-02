@@ -20,7 +20,7 @@ export class Chat implements IChat {
             message = createMessage(message)
         }
 
-        if (!message.id) {
+        if (message.id === undefined) {
             message.id = createId()
         }
 

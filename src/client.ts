@@ -93,7 +93,7 @@ export class Client extends EventEmitter implements IClient {
 
     private async onChat(stanza: Element): Promise<void> {
         const body = stanza.getChild('body')
-        if (!body) {
+        if (body === undefined) {
             return
         }
 
