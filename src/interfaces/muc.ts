@@ -30,7 +30,7 @@ export interface IRoom extends NodeJS.EventEmitter {
     send(message: IOutgoing | string): Promise<string>
 }
 
-interface IOccupant {
+export interface IOccupant {
     realJid?: JID
     roomJid: JID
     nick: string
@@ -38,7 +38,7 @@ interface IOccupant {
     role: Role
 }
 
-enum Affiliation {
+export enum Affiliation {
     none,
     owner,
     admin,
@@ -46,7 +46,7 @@ enum Affiliation {
     outcast,
 }
 
-enum Role {
+export enum Role {
     none,
     moderator,
     participant,
