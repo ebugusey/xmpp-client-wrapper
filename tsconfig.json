@@ -3,7 +3,10 @@
     "src/**/*.ts"
   ],
   "compilerOptions": {
-    "target": "es6",
+    "target": "es2017",
+    "lib": [
+      "es2016",
+    ],
     "module": "commonjs",
     "moduleResolution": "node",
     "esModuleInterop": true,
