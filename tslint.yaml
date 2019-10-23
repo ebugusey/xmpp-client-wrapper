@@ -20,14 +20,18 @@ rules:
   prefer-readonly: true
   semicolon:
     options: never
+  # Single quote is preferable, it allows writing string literals without escaping
+  # double-quote. But writing "test 'test'" should also be possible.
   quotemark:
     options:
       - single
+      - avoid-escape
   arrow-parens:
     options:
       - ban-single-arg-parens
   no-null-keyword: true
-  unified-signatures: true
+  # C#-like overrides isn't possible with this on.
+  unified-signatures: false
   no-non-null-assertion: true
   object-literal-sort-keys: false
   no-async-without-await: true

@@ -2,7 +2,7 @@ import { JID } from '@xmpp/jid'
 import { IIncoming, IOutgoing } from './message'
 
 export interface IJoinOptions {
-    nick?: string
+    nick: string
     history?: {
         seconds?: number,
         maxStanza?: number,
@@ -11,10 +11,13 @@ export interface IJoinOptions {
 }
 
 export interface IRoom extends NodeJS.EventEmitter {
-    jid: JID
-    name: string
-    subject: string
-    occupants: ReadonlyArray<IOccupant>
+    readonly roomJid: JID
+
+    readonly joined: boolean
+
+    readonly name: string
+    readonly subject: string
+    readonly occupants: readonly IOccupant[]
 
     on(event: 'message', listener: (message: IIncoming) => void): this
     on(event: 'subject', listener: (subject: string) => void): this
@@ -30,7 +33,7 @@ export interface IRoom extends NodeJS.EventEmitter {
     send(message: IOutgoing | string): Promise<string>
 }
 
-interface IOccupant {
+export interface IOccupant {
     realJid?: JID
     roomJid: JID
     nick: string
@@ -38,7 +41,7 @@ interface IOccupant {
     role: Role
 }
 
-enum Affiliation {
+export enum Affiliation {
     none,
     owner,
     admin,
@@ -46,7 +49,7 @@ enum Affiliation {
     outcast,
 }
 
-enum Role {
+export enum Role {
     none,
     moderator,
     participant,
