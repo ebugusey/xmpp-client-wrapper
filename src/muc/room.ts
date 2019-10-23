@@ -1,8 +1,7 @@
 import { jid, xml } from '@xmpp/client'
-import { Client as XmppClient } from '@xmpp/client-core'
 import { EventEmitter } from 'events'
-import uuid = require('uuid/v1')
 import { StanzaError } from '../errors/stanza-error'
+import { IConnection } from '../interfaces/connection'
 import { IOutgoing } from '../interfaces/message'
 import { IJoinOptions, IOccupant, IRoom } from '../interfaces/muc'
 import { bareSenderIs, isError, isNormal, isPresence } from '../stanza/filter'
@@ -16,7 +15,7 @@ const NS_MUC = 'http://jabber.org/protocol/muc'
 export class Room extends EventEmitter implements IRoom {
     public readonly roomJid: jid.JID
 
-    private readonly _client: XmppClient
+    private readonly _connection: IConnection
     private readonly _emitter: IRoom
 
     private _userJid?: jid.JID
@@ -24,13 +23,13 @@ export class Room extends EventEmitter implements IRoom {
     private _joined: boolean
     private _connecting: boolean
 
-    constructor(client: XmppClient, roomJid: jid.JID) {
+    constructor(connection: IConnection, roomJid: jid.JID) {
         super()
 
         this.roomJid = roomJid.bare()
 
         this._emitter = this
-        this._client = client
+        this._connection = connection
 
         this._joined = false
         this._connecting = false
@@ -56,7 +55,7 @@ export class Room extends EventEmitter implements IRoom {
 
         try {
             fullJid = createUserJid(this.roomJid, opts.nick)
-            await enterRoom(this._client, fullJid)
+            await enterRoom(this._connection, fullJid)
         } finally {
             this._connecting = false
         }
@@ -75,8 +74,8 @@ export class Room extends EventEmitter implements IRoom {
     }
 }
 
-async function enterRoom(client: XmppClient, fullJid: jid.JID): Promise<void> {
-    const presenceId = createId()
+async function enterRoom(connection: IConnection, fullJid: jid.JID): Promise<void> {
+    const presenceId = connection.createId()
     const joinPresence = xml(
         'presence',
         {
@@ -91,7 +90,7 @@ async function enterRoom(client: XmppClient, fullJid: jid.JID): Promise<void> {
     // If we don't prepare promise before sending presence
     // we can miss response.
     const responsePromise = getStanza(
-        client,
+        connection.client,
         stanza =>
             isPresence(stanza)
             && bareSenderIs(stanza, fullJid.bare())
@@ -102,15 +101,11 @@ async function enterRoom(client: XmppClient, fullJid: jid.JID): Promise<void> {
         JOIN_TIMEOUT_IN_MS,
     )
 
-    await client.send(joinPresence)
+    await connection.client.send(joinPresence)
 
     const response = await responsePromise
 
     StanzaError.throwIfError(response)
-}
-
-function createId(): string {
-    return uuid()
 }
 
 function createUserJid(room: jid.JID, nick: string): jid.JID {

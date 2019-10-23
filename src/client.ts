@@ -4,12 +4,15 @@ import { JID } from '@xmpp/jid'
 import { Element } from '@xmpp/xml'
 import { EventEmitter, once } from 'events'
 import { Chat } from './chat'
+import { createId } from './id-generator'
 import { IChat } from './interfaces/chat'
 import { ClientStatus, IClient } from './interfaces/client'
+import { IConnection } from './interfaces/connection'
 import { IIncoming } from './interfaces/message'
 import { IJoinOptions, IRoom } from './interfaces/muc'
 
 export class Client extends EventEmitter implements IClient {
+    private readonly _connection: IConnection
     private readonly _client: XmppClient
     private readonly _emitter: IClient
 
@@ -20,6 +23,11 @@ export class Client extends EventEmitter implements IClient {
 
         this._client = xmpp
             .on('stanza', this.onStanza)
+
+        this._connection = {
+            client: this._client,
+            createId,
+        }
     }
 
     public get status(): ClientStatus {
@@ -49,7 +57,7 @@ export class Client extends EventEmitter implements IClient {
         this.throwIfOffline()
         await this.waitForOnline()
 
-        const chat = new Chat(userJid, this._client)
+        const chat = new Chat(userJid, this._connection)
 
         return chat
     }
