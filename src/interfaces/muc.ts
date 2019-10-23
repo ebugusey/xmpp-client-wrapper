@@ -2,7 +2,7 @@ import { JID } from '@xmpp/jid'
 import { IIncoming, IOutgoing } from './message'
 
 export interface IJoinOptions {
-    nick?: string
+    nick: string
     history?: {
         seconds?: number,
         maxStanza?: number,
