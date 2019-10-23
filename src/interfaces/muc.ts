@@ -11,10 +11,13 @@ export interface IJoinOptions {
 }
 
 export interface IRoom extends NodeJS.EventEmitter {
-    jid: JID
-    name: string
-    subject: string
-    occupants: ReadonlyArray<IOccupant>
+    readonly roomJid: JID
+
+    readonly joined: boolean
+
+    readonly name: string
+    readonly subject: string
+    readonly occupants: readonly IOccupant[]
 
     on(event: 'message', listener: (message: IIncoming) => void): this
     on(event: 'subject', listener: (subject: string) => void): this
