@@ -8,10 +8,7 @@ rules:
         - '@xmpp/jid'
         - '@xmpp/xml'
         - '@xmpp/client-core'
-  no-submodule-imports:
-    options:
-      # exceptions
-      - uuid/v1
+  no-submodule-imports: true
   variable-name:
     options:
       - ban-keywords

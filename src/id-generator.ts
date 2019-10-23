@@ -1,6 +1,6 @@
-import uuid from 'uuid/v1'
+import id from '@xmpp/id'
 import { IdGenerator } from './interfaces/connection'
 
-const createId: IdGenerator = () => uuid()
+const createId: IdGenerator = () => id()
 
 export { createId }
