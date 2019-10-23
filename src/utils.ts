@@ -1,4 +1,8 @@
 
+export function isNotUndefined<T>(value: T | undefined): value is T {
+    return value !== undefined
+}
+
 export function invertMap<TKey, TValue>(map: Map<TKey, TValue>): Map<TValue, TKey> {
     const inverted = new Map<TValue, TKey>(
         [...map]
