@@ -1,8 +1,8 @@
 declare module '@xmpp/client' {
     import { Client } from '@xmpp/client-core'
     import { Reconnect } from '@xmpp/reconnect'
-    import * as jid from '@xmpp/jid'
-    import * as xml from '@xmpp/xml'
+    import jid from '@xmpp/jid'
+    import xml from '@xmpp/xml'
 
     export interface XmppOptions {
         /**
