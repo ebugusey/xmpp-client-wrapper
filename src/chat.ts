@@ -15,34 +15,30 @@ export class Chat implements IChat {
     }
 
     public async send(message: string | IOutgoing): Promise<string> {
+        let text: string
+        let id: string | undefined
         if (typeof message === 'string') {
-            message = this.createMessage(message)
+            text = message
+        } else {
+            ({ id, text } = message)
         }
 
-        if (message.id === undefined) {
-            message.id = this._connection.createId()
+        if (id === undefined) {
+            id = this._connection.createId()
         }
 
         const stanza = xml(
             'message',
             {
+                id,
                 type: 'chat',
-                to: this.jid.bare.toString(),
+                to: this.jid.toString(),
             },
-            xml('body', message.text),
+            xml('body', text),
         )
 
         await this._connection.client.send(stanza)
 
-        return message.id
-    }
-
-    private createMessage(text: string): IOutgoing {
-        const message: IOutgoing = {
-            id: this._connection.createId(),
-            text,
-        }
-
-        return message
+        return id
     }
 }
