@@ -57,7 +57,7 @@ export class Client extends EventEmitter implements IClient {
         this.throwIfOffline()
         await this.waitForOnline()
 
-        const chat = new Chat(userJid, this._connection)
+        const chat = new Chat(this._connection, userJid)
 
         return chat
     }

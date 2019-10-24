@@ -9,7 +9,7 @@ export class Chat implements IChat {
 
     private readonly _connection: IConnection
 
-    constructor(jid: JID, connection: IConnection) {
+    constructor(connection: IConnection, jid: JID) {
         this.jid = jid
         this._connection = connection
     }
