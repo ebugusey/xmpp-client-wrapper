@@ -20,6 +20,9 @@ export interface IClient extends NodeJS.EventEmitter {
     emit(event: 'chat', chat: IChat, message: IIncoming): boolean
     emit(event: 'error', err: Error): boolean
 
+    start(): Promise<void>
+    stop(): Promise<void>
+
     chatWith(jid: JID): Promise<IChat>
     join(channel: JID, opts?: IJoinOptions): Promise<IRoom>
 }

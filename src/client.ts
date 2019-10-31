@@ -53,6 +53,18 @@ export class Client extends EventEmitter implements IClient {
         return []
     }
 
+    public async start(): Promise<void> {
+        this.throwIfOnline()
+        await this._client.start()
+        await this.waitForOnline()
+    }
+
+    public async stop(): Promise<void> {
+        this.throwIfOffline()
+        await this._client.stop()
+        await this.waitForOffline()
+    }
+
     public async chatWith(userJid: JID): Promise<IChat> {
         this.throwIfOffline()
         await this.waitForOnline()
@@ -64,6 +76,12 @@ export class Client extends EventEmitter implements IClient {
 
     public join(channelJid: JID, opts?: IJoinOptions): Promise<IRoom> {
         throw new Error('Method not implemented.')
+    }
+
+    private throwIfOnline() {
+        if (this.status === ClientStatus.online) {
+            throw new Error('Already online.')
+        }
     }
 
     private throwIfOffline() {
@@ -78,6 +96,14 @@ export class Client extends EventEmitter implements IClient {
         }
 
         await once(this._client, 'online')
+    }
+
+    private async waitForOffline(): Promise<void> {
+        if (this.status === ClientStatus.offline) {
+            return
+        }
+
+        await once(this._client, 'offline')
     }
 
     private onStanza(stanza: Element): void {
