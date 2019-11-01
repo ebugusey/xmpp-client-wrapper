@@ -1,6 +1,5 @@
 import { xml } from '@xmpp/client'
-import { Client as XmppClient } from '@xmpp/client-core'
-import { IConnection, IStanzaEmitter } from '../interfaces/connection'
+import { IStanzaEmitter } from '../interfaces/connection'
 
 const DEFAULT_TIMEOUT_IN_MS = 10000
 
