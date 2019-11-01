@@ -69,7 +69,7 @@ export class Client extends EventEmitter implements IClient {
         this.throwIfOffline()
         await this.waitForOnline()
 
-        const chat = new Chat(this._connection, userJid)
+        const chat = this.getChat(userJid)
 
         return chat
     }
@@ -107,25 +107,19 @@ export class Client extends EventEmitter implements IClient {
     }
 
     private onStanza(stanza: Element): void {
-        const asyncTasks: Array<Promise<void>> = []
-
         if (stanza.is('message')) {
             switch (stanza.attrs.type) {
                 case 'chat':
-                    const chatTask = this.onChat(stanza)
-                    asyncTasks.push(chatTask)
+                    this.onChat(stanza)
                     break
 
                 default:
                     break
             }
         }
-
-        Promise.all(asyncTasks)
-            .catch(err => this._emitter.emit('error', err))
     }
 
-    private async onChat(stanza: Element): Promise<void> {
+    private onChat(stanza: Element): void {
         const body = stanza.getChild('body')
         if (body === undefined) {
             return
@@ -139,9 +133,13 @@ export class Client extends EventEmitter implements IClient {
             from: from.toString(),
         }
 
-        const chat = await this.chatWith(from)
+        const chat = this.getChat(from)
 
         this._emitter.emit('chat', chat, message)
+    }
+
+    private getChat(userJid: JID): IChat {
+        return new Chat(this._connection, userJid)
     }
 }
 
