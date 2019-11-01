@@ -1,16 +1,15 @@
-import { xml } from '@xmpp/client'
-import { JID } from '@xmpp/jid'
+import { jid, xml } from '@xmpp/client'
 import { IChat } from './interfaces/chat'
 import { IConnection } from './interfaces/connection'
 import { IOutgoing } from './interfaces/message'
 
 export class Chat implements IChat {
-    public readonly jid: JID
+    public readonly jid: jid.JID
 
     private readonly _connection: IConnection
 
-    constructor(connection: IConnection, jid: JID) {
-        this.jid = jid
+    constructor(connection: IConnection, userJid: jid.JID) {
+        this.jid = userJid
         this._connection = connection
     }
 

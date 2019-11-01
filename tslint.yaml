@@ -5,8 +5,6 @@ rules:
   no-implicit-dependencies:
     options:
       - # exceptions
-        - '@xmpp/jid'
-        - '@xmpp/xml'
         - '@xmpp/client-core'
   no-submodule-imports: true
   variable-name:

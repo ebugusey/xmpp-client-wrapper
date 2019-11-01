@@ -1,7 +1,5 @@
-import { client as xmppClient, jid, XmppOptions } from '@xmpp/client'
 import { Client as XmppClient } from '@xmpp/client-core'
-import { JID } from '@xmpp/jid'
-import { Element } from '@xmpp/xml'
+import { client as xmppClient, jid, xml, XmppOptions } from '@xmpp/client'
 import { EventEmitter, once } from 'events'
 import { Chat } from './chat'
 import { createId } from './id-generator'
@@ -65,7 +63,7 @@ export class Client extends EventEmitter implements IClient {
         await this.waitForOffline()
     }
 
-    public async chatWith(userJid: JID): Promise<IChat> {
+    public async chatWith(userJid: jid.JID): Promise<IChat> {
         this.throwIfOffline()
         await this.waitForOnline()
 
@@ -74,7 +72,7 @@ export class Client extends EventEmitter implements IClient {
         return chat
     }
 
-    public join(channelJid: JID, opts?: IJoinOptions): Promise<IRoom> {
+    public join(channelJid: jid.JID, opts?: IJoinOptions): Promise<IRoom> {
         throw new Error('Method not implemented.')
     }
 
@@ -106,7 +104,7 @@ export class Client extends EventEmitter implements IClient {
         await once(this._client, 'offline')
     }
 
-    private onStanza(stanza: Element): void {
+    private onStanza(stanza: xml.Element): void {
         if (stanza.is('message')) {
             switch (stanza.attrs.type) {
                 case 'chat':
@@ -119,7 +117,7 @@ export class Client extends EventEmitter implements IClient {
         }
     }
 
-    private onChat(stanza: Element): void {
+    private onChat(stanza: xml.Element): void {
         const body = stanza.getChild('body')
         if (body === undefined) {
             return
@@ -138,7 +136,7 @@ export class Client extends EventEmitter implements IClient {
         this._emitter.emit('chat', chat, message)
     }
 
-    private getChat(userJid: JID): IChat {
+    private getChat(userJid: jid.JID): IChat {
         return new Chat(this._connection, userJid)
     }
 }

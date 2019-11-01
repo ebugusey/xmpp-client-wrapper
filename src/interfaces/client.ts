@@ -1,4 +1,4 @@
-import { JID } from '@xmpp/jid'
+import { jid } from '@xmpp/client'
 import { IChat } from './chat'
 import { IIncoming } from './message'
 import { IJoinOptions, IRoom } from './muc'
@@ -23,6 +23,6 @@ export interface IClient extends NodeJS.EventEmitter {
     start(): Promise<void>
     stop(): Promise<void>
 
-    chatWith(jid: JID): Promise<IChat>
-    join(channel: JID, opts?: IJoinOptions): Promise<IRoom>
+    chatWith(jid: jid.JID): Promise<IChat>
+    join(channel: jid.JID, opts?: IJoinOptions): Promise<IRoom>
 }
