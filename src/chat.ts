@@ -1,53 +1,43 @@
-import { xml } from '@xmpp/client'
-import { Client as XmppClient } from '@xmpp/client-core'
-import { JID } from '@xmpp/jid'
-import uuid = require('uuid/v1')
+import { jid, xml } from '@xmpp/client'
 import { IChat } from './interfaces/chat'
+import { IConnection } from './interfaces/connection'
 import { IOutgoing } from './interfaces/message'
 
 export class Chat implements IChat {
-    public readonly jid: JID
+    public readonly jid: jid.JID
 
-    private readonly _client: XmppClient
+    private readonly _connection: IConnection
 
-    constructor(jid: JID, client: XmppClient) {
-        this.jid = jid
-        this._client = client
+    constructor(connection: IConnection, userJid: jid.JID) {
+        this.jid = userJid
+        this._connection = connection
     }
 
     public async send(message: string | IOutgoing): Promise<string> {
+        let text: string
+        let id: string | undefined
         if (typeof message === 'string') {
-            message = createMessage(message)
+            text = message
+        } else {
+            ({ id, text } = message)
         }
 
-        if (message.id === undefined) {
-            message.id = createId()
+        if (id === undefined) {
+            id = this._connection.createId()
         }
 
         const stanza = xml(
             'message',
             {
+                id,
                 type: 'chat',
-                to: this.jid.bare.toString(),
+                to: this.jid.toString(),
             },
-            xml('body', message.text),
+            xml('body', text),
         )
 
-        await this._client.send(stanza)
+        await this._connection.client.send(stanza)
 
-        return message.id
+        return id
     }
-}
-
-function createMessage(text: string): IOutgoing {
-    const message: IOutgoing = {
-        id: createId(),
-        text,
-    }
-
-    return message
-}
-
-function createId(): string {
-    return uuid()
 }

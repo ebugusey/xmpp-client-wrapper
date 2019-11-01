@@ -1,4 +1,4 @@
-import { JID } from '@xmpp/jid'
+import { jid } from '@xmpp/client'
 import { IIncoming, IOutgoing } from './message'
 
 export interface IJoinOptions {
@@ -11,7 +11,7 @@ export interface IJoinOptions {
 }
 
 export interface IRoom extends NodeJS.EventEmitter {
-    readonly roomJid: JID
+    readonly roomJid: jid.JID
 
     readonly joined: boolean
 
@@ -34,8 +34,8 @@ export interface IRoom extends NodeJS.EventEmitter {
 }
 
 export interface IOccupant {
-    realJid?: JID
-    roomJid: JID
+    realJid?: jid.JID
+    roomJid: jid.JID
     nick: string
     affiliation: Affiliation
     role: Role

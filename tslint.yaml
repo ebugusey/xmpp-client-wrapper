@@ -2,16 +2,8 @@ defaultSeverity: warning
 extends:
   - tslint:latest
 rules:
-  no-implicit-dependencies:
-    options:
-      - # exceptions
-        - '@xmpp/jid'
-        - '@xmpp/xml'
-        - '@xmpp/client-core'
-  no-submodule-imports:
-    options:
-      # exceptions
-      - uuid/v1
+  no-implicit-dependencies: true
+  no-submodule-imports: true
   variable-name:
     options:
       - ban-keywords

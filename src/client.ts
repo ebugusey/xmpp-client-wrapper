@@ -1,15 +1,15 @@
-import { client as xmppClient, jid, XmppOptions } from '@xmpp/client'
-import { Client as XmppClient } from '@xmpp/client-core'
-import { JID } from '@xmpp/jid'
-import { Element } from '@xmpp/xml'
+import { client as xmppClient, jid, xml, XmppClient, XmppOptions } from '@xmpp/client'
 import { EventEmitter, once } from 'events'
 import { Chat } from './chat'
+import { createId } from './id-generator'
 import { IChat } from './interfaces/chat'
 import { ClientStatus, IClient } from './interfaces/client'
+import { IConnection } from './interfaces/connection'
 import { IIncoming } from './interfaces/message'
 import { IJoinOptions, IRoom } from './interfaces/muc'
 
 export class Client extends EventEmitter implements IClient {
+    private readonly _connection: IConnection
     private readonly _client: XmppClient
     private readonly _emitter: IClient
 
@@ -20,6 +20,11 @@ export class Client extends EventEmitter implements IClient {
 
         this._client = xmpp
             .on('stanza', this.onStanza)
+
+        this._connection = {
+            client: this._client,
+            createId,
+        }
     }
 
     public get status(): ClientStatus {
@@ -45,17 +50,35 @@ export class Client extends EventEmitter implements IClient {
         return []
     }
 
-    public async chatWith(userJid: JID): Promise<IChat> {
+    public async start(): Promise<void> {
+        this.throwIfOnline()
+        await this._client.start()
+        await this.waitForOnline()
+    }
+
+    public async stop(): Promise<void> {
+        this.throwIfOffline()
+        await this._client.stop()
+        await this.waitForOffline()
+    }
+
+    public async chatWith(userJid: jid.JID): Promise<IChat> {
         this.throwIfOffline()
         await this.waitForOnline()
 
-        const chat = new Chat(userJid, this._client)
+        const chat = this.getChat(userJid)
 
         return chat
     }
 
-    public join(channelJid: JID, opts?: IJoinOptions): Promise<IRoom> {
+    public join(channelJid: jid.JID, opts?: IJoinOptions): Promise<IRoom> {
         throw new Error('Method not implemented.')
+    }
+
+    private throwIfOnline() {
+        if (this.status === ClientStatus.online) {
+            throw new Error('Already online.')
+        }
     }
 
     private throwIfOffline() {
@@ -72,26 +95,28 @@ export class Client extends EventEmitter implements IClient {
         await once(this._client, 'online')
     }
 
-    private onStanza(stanza: Element): void {
-        const asyncTasks: Array<Promise<void>> = []
+    private async waitForOffline(): Promise<void> {
+        if (this.status === ClientStatus.offline) {
+            return
+        }
 
+        await once(this._client, 'offline')
+    }
+
+    private onStanza(stanza: xml.Element): void {
         if (stanza.is('message')) {
             switch (stanza.attrs.type) {
                 case 'chat':
-                    const chatTask = this.onChat(stanza)
-                    asyncTasks.push(chatTask)
+                    this.onChat(stanza)
                     break
 
                 default:
                     break
             }
         }
-
-        Promise.all(asyncTasks)
-            .catch(err => this._emitter.emit('error', err))
     }
 
-    private async onChat(stanza: Element): Promise<void> {
+    private onChat(stanza: xml.Element): void {
         const body = stanza.getChild('body')
         if (body === undefined) {
             return
@@ -105,9 +130,13 @@ export class Client extends EventEmitter implements IClient {
             from: from.toString(),
         }
 
-        const chat = await this.chatWith(from)
+        const chat = this.getChat(from)
 
         this._emitter.emit('chat', chat, message)
+    }
+
+    private getChat(userJid: jid.JID): IChat {
+        return new Chat(this._connection, userJid)
     }
 }
 

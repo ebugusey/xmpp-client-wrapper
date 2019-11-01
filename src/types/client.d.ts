@@ -1,8 +1,11 @@
 declare module '@xmpp/client' {
     import { Client } from '@xmpp/client-core'
     import { Reconnect } from '@xmpp/reconnect'
-    import * as jid from '@xmpp/jid'
-    import * as xml from '@xmpp/xml'
+    import jid from '@xmpp/jid'
+    import xml from '@xmpp/xml'
+
+    export { ConnectionStatus } from '@xmpp/client-core'
+    export { jid, xml }
 
     export interface XmppOptions {
         /**
@@ -40,13 +43,11 @@ declare module '@xmpp/client' {
         reconnect: Reconnect
     }
 
-    type xmpp = Client & Xmpp
+    export type XmppClient = Client & Xmpp
 
     /**
      * Creates instance of xmpp client.
      * @param options Connection options.
      */
-    export function client(options: XmppOptions): xmpp
-
-    export { jid, xml }
+    export function client(options: XmppOptions): XmppClient
 }

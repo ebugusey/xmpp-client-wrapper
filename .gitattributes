@@ -8,6 +8,9 @@
 # The above will handle all files NOT found below
 #
 
+*.ts    diff=ts
+*.d.ts  diff=dts
+
 # Documents
 *.bibtex   text diff=bibtex
 *.doc	        diff=astextplain
