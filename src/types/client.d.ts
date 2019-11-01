@@ -4,6 +4,9 @@ declare module '@xmpp/client' {
     import jid from '@xmpp/jid'
     import xml from '@xmpp/xml'
 
+    export { ConnectionStatus } from '@xmpp/client-core'
+    export { jid, xml }
+
     export interface XmppOptions {
         /**
          * The service to connect to, accepts an URI or a domain.
@@ -47,6 +50,4 @@ declare module '@xmpp/client' {
      * @param options Connection options.
      */
     export function client(options: XmppOptions): XmppClient
-
-    export { jid, xml }
 }

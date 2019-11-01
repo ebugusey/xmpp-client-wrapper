@@ -2,6 +2,8 @@ declare module '@xmpp/client-core' {
     import { Connection } from '@xmpp/connection'
     import { Element } from '@xmpp/xml'
 
+    export { ConnectionStatus } from '@xmpp/connection'
+
     export class Client extends Connection {
         /**
          * Sends a stanza.

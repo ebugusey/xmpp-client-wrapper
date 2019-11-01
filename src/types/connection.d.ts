@@ -3,7 +3,7 @@ declare module '@xmpp/connection' {
     import { JID } from '@xmpp/jid'
     import { Element } from '@xmpp/xml'
 
-    type ConnectionStatus =
+    export type ConnectionStatus =
         'online'
         | 'offline'
         | 'connecting'
