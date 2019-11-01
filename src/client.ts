@@ -1,5 +1,4 @@
-import { Client as XmppClient } from '@xmpp/client-core'
-import { client as xmppClient, jid, xml, XmppOptions } from '@xmpp/client'
+import { client as xmppClient, jid, xml, XmppClient, XmppOptions } from '@xmpp/client'
 import { EventEmitter, once } from 'events'
 import { Chat } from './chat'
 import { createId } from './id-generator'

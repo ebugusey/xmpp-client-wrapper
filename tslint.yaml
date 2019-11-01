@@ -2,10 +2,7 @@ defaultSeverity: warning
 extends:
   - tslint:latest
 rules:
-  no-implicit-dependencies:
-    options:
-      - # exceptions
-        - '@xmpp/client-core'
+  no-implicit-dependencies: true
   no-submodule-imports: true
   variable-name:
     options:

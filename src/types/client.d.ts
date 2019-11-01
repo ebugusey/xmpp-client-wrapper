@@ -40,13 +40,13 @@ declare module '@xmpp/client' {
         reconnect: Reconnect
     }
 
-    type xmpp = Client & Xmpp
+    export type XmppClient = Client & Xmpp
 
     /**
      * Creates instance of xmpp client.
      * @param options Connection options.
      */
-    export function client(options: XmppOptions): xmpp
+    export function client(options: XmppOptions): XmppClient
 
     export { jid, xml }
 }
